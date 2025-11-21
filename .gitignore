@@ -1,0 +1,37 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+
+# Node / Web projects (if applicable)
+node_modules/
+dist/
+build/
+
+# Python projects (if applicable)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Java projects (if applicable)
+*.class
+target/
+
+# Hidden system files
+*.tmp
+*.temp
+.cache/
