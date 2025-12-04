@@ -1,9 +1,44 @@
 import React from "react";
 import { Zap, BarChart3, Wifi, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { ProtocolSelectModal } from '../components/ProtocolSelectModal';
+import { NetworkCondition } from '../types';
+import { NetworkConditionSimulator } from '../components/NetworkConditionSimulator';
+import { VisualizationPage } from '../components/VisualizationPage';
+
 
 export default function Home() {
+
   const navigate = useNavigate();
+  const [view, setView] = useState<'home' | 'protocol-select' | 'network-select' | 'visualization'>('home');
+  const [selectedProtocol, setSelectedProtocol] = useState<'http2' | 'http3' | null>(null);
+  const [networkCondition, setNetworkCondition] = useState<NetworkCondition>({
+    latency: 20,
+    bandwidth: 10,
+    packetLoss: 0,
+    name: '5G',
+  });
+
+  const handleNetworkSelect = (condition: NetworkCondition) => {
+    setNetworkCondition(condition);
+    setView('visualization');
+  };
+
+  const handleProtocolSelect = (protocol: 'http2' | 'http3') => {
+    setSelectedProtocol(protocol);
+    setView('visualization');
+  };
+
+  const handleBackToHome = () => {
+    setView('home');
+    setSelectedProtocol(null);
+    setNetworkCondition({ latency: 20, bandwidth: 10, packetLoss: 0, name: '5G' });
+  };
+
+  if (view === 'visualization' && selectedProtocol) {
+    return <VisualizationPage protocol={selectedProtocol} networkCondition={networkCondition} onBack={handleBackToHome} />;
+  }
 
   return (
     <div className="min-h-[calc(100vh-140px)] bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -26,13 +61,15 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => navigate("/playground")}
+              onClick={() => setView('protocol-select')}
               className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
             >
               <span>Start Comparison</span>
               <ArrowRight className="w-5 h-5" />
             </button>
-
+            {view === 'protocol-select' && (
+              <ProtocolSelectModal onSelect={handleProtocolSelect} onClose={handleBackToHome} />
+            )}
             <button
               onClick={() => navigate("/learn")}
               className="px-8 py-4 bg-slate-700 hover:bg-slate-600 text-white text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105"
@@ -40,6 +77,15 @@ export default function Home() {
               Start Tutorial
             </button>
           </div>
+          {view === 'network-select' && selectedProtocol && (
+            <NetworkConditionSimulator
+              protocol={selectedProtocol}
+              onSelect={handleNetworkSelect}
+              onBack={() => {
+                setView('protocol-select');
+              }}
+            />
+          )}
         </div>
 
         {/* Feature cards */}

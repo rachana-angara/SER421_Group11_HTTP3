@@ -1,41 +1,84 @@
-export default function Playground() {
+import { Zap, Network, BarChart3, Wifi, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { NetworkCondition } from '../types';
+import { ProtocolSelectModal } from '../components/ProtocolSelectModal';
+import { NetworkConditionSimulator } from '../components/NetworkConditionSimulator';
+import { VisualizationPage } from '../components/VisualizationPage';
+
+function Playground() {
+  const [view, setView] = useState<'home' | 'protocol-select' | 'network-select' | 'visualization'>('home');
+  const [selectedProtocol, setSelectedProtocol] = useState<'http2' | 'http3' | null>(null);
+  const [networkCondition, setNetworkCondition] = useState<NetworkCondition>({
+    latency: 20,
+    bandwidth: 10,
+    packetLoss: 0,
+    name: '5G',
+  });
+
+  const handleProtocolSelect = (protocol: 'http2' | 'http3') => {
+    setSelectedProtocol(protocol);
+    setView('network-select');
+  };
+
+  const handleNetworkSelect = (condition: NetworkCondition) => {
+    setNetworkCondition(condition);
+    setView('visualization');
+  };
+
+  const handleBackToHome = () => {
+    setView('home');
+    setSelectedProtocol(null);
+    setNetworkCondition({ latency: 20, bandwidth: 10, packetLoss: 0, name: '5G' });
+  };
+
+  if (view === 'visualization' && selectedProtocol) {
+    return <VisualizationPage protocol={selectedProtocol} networkCondition={networkCondition} onBack={handleBackToHome} />;
+  }
+
   return (
-    <div className="container mx-auto px-6 py-12 text-gray-200 space-y-6">
-      <h1 className="text-4xl font-bold text-white mb-2">
-        Protocol Playground (Planned)
-      </h1>
-      <p className="text-lg text-gray-300 max-w-3xl">
-        This page will become the interactive area where students configure test
-        scenarios and compare HTTP/1.1, HTTP/2, and HTTP/3. For now, we define
-        the layout and responsibilities.
-      </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <nav className="container mx-auto px-6 py-6">
+        <div className="flex items-center space-x-2">
+          <Network className="w-8 h-8 text-blue-400" />
+          <span className="text-2xl font-bold text-white">Protocol Racer</span>
+        </div>
+      </nav>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-2">
-          <h2 className="text-xl font-semibold text-white">
-            Scenario Builder (Person C)
-          </h2>
-          <p className="text-gray-300 text-sm">
-            TODO: form to choose number of assets, their sizes, which protocol
-            to use, and simulated network conditions (latency, loss, bandwidth).
-          </p>
+      <main className="container mx-auto px-6 py-20">
+        <div className="text-center mb-20">
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => setView('protocol-select')}
+              className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
+            >
+              <span>Start Comparison</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
+          </div>
+
+          {view === 'protocol-select' && (
+            <ProtocolSelectModal onSelect={handleProtocolSelect} onClose={handleBackToHome} />
+          )}
+
+          {view === 'network-select' && selectedProtocol && (
+            <NetworkConditionSimulator
+              protocol={selectedProtocol}
+              onSelect={handleNetworkSelect}
+              onBack={() => {
+                setView('protocol-select');
+              }}
+            />
+          )}
         </div>
 
-        <div className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-2">
-          <h2 className="text-xl font-semibold text-white">
-            Results & Charts (Person C)
-          </h2>
-          <p className="text-gray-300 text-sm">
-            TODO: charts / tables that show total load time, per-request timing,
-            and differences between HTTP/1.1, HTTP/2, and HTTP/3.
-          </p>
-        </div>
-      </div>
+      </main>
 
-      <p className="text-xs text-gray-400 italic">
-        Implementation of the playground logic and charts is planned for the
-        next milestone.
-      </p>
+      <footer className="container mx-auto px-6 py-12 text-center text-gray-400 border-t border-gray-800 mt-20">
+        <p>Built to demonstrate the power of modern web transport protocols</p>
+      </footer>
     </div>
   );
 }
+
+export default Playground;
