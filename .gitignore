@@ -19,6 +19,7 @@ Thumbs.db
 node_modules/
 dist/
 build/
+.vite/
 
 # Python projects (if applicable)
 __pycache__/
