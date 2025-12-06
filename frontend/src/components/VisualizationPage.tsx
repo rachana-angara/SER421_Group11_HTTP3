@@ -3,7 +3,7 @@ import { Zap, Network, BarChart3, Wifi, X } from 'lucide-react';
 import { NetworkCondition, WaterfallRequest, Metrics, PhaseStats } from '../types';
 import { generateWaterfallData, getPhaseStats } from '../utils/waterfallUtils';
 import { MetricCard } from './MetricCard';
-
+import { runFastSimulation } from '../utils/simulationService';
 interface Props {
   protocol: 'http2' | 'http3';
   networkCondition: NetworkCondition;
@@ -21,33 +21,43 @@ export function VisualizationPage({ protocol, networkCondition, onBack }: Props)
     throughput: 0,
   });
   const [waterfallData, setWaterfallData] = useState<WaterfallRequest[]>([]);
+  const [phaseStats, setPhaseStats] = useState<PhaseStats[]>([]);
 
-  const startSimulation = () => {
+
+  const startSimulation = async () => {
     setSimulationRunning(true);
-    setWaterfallData(generateWaterfallData(protocol, networkCondition));
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 20;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        setSimulationRunning(false);
-      }
 
-      const baseLatency = protocol === 'http2' ? 50 : 25;
-      const baseStreams = protocol === 'http2' ? 6 : 12;
-      const baseCompression = protocol === 'http2' ? 65 : 80;
-      const baseThroughput = protocol === 'http2' ? 5.2 : 8.7;
+    try {
+      // 1) Ask backend to run the fast simulation
+      const result = await runFastSimulation(protocol, networkCondition);
+      console.log('simulation result from backend:', result);
 
-      const networkLatencyFactor = 1 + networkCondition.latency / 200;
-
+      // 2) Update the 4 metric cards using backend + UI data
       setMetrics({
-        latency: Math.round(baseLatency * networkLatencyFactor * (1 - progress / 100)),
-        multiplexingStreams: Math.round(baseStreams * (progress / 100)),
-        headerCompression: Math.round(baseCompression * (progress / 100)),
-        throughput: Math.round((baseThroughput * (progress / 100) * (networkCondition.bandwidth / 10)) * 10) / 10,
+        latency: Math.round(result.latencyMs),          
+        throughput: networkCondition.bandwidth,         
+        multiplexingStreams: protocol === 'http2' ? 6 : 8, 
+        headerCompression: protocol === 'http2' ? 30 : 45, 
       });
-    }, 50);
+
+      // 3) Drive the waterfall chart
+      const waterfall = generateWaterfallData(protocol, networkCondition);
+
+      setWaterfallData(waterfall);
+      setPhaseStats(getPhaseStats(waterfall));
+
+      console.log('waterfall data from backend latency:', waterfall);
+    } catch (error) {
+      console.error('Error running simulation', error);
+    } finally {
+      setSimulationRunning(false);
+    }
+  };
+
+
+  const handleStartSimulation = () => {
+    console.log('Starting backend fast simulation...');
+    startSimulation();
   };
 
   return (

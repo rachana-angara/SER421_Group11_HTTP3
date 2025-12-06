@@ -1,4 +1,4 @@
-package com.asu.controller;
+package com.asu.http23lab.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
