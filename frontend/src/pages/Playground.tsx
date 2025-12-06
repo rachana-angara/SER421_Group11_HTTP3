@@ -1,5 +1,6 @@
 import { Zap, Network, BarChart3, Wifi, ArrowRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { callHealth } from '../utils/apiClient';
 import { NetworkCondition } from '../types';
 import { ProtocolSelectModal } from '../components/ProtocolSelectModal';
 import { NetworkConditionSimulator } from '../components/NetworkConditionSimulator';
@@ -7,6 +8,7 @@ import { VisualizationPage } from '../components/VisualizationPage';
 
 function Playground() {
   const [view, setView] = useState<'home' | 'protocol-select' | 'network-select' | 'visualization'>('home');
+  const [backendError, setBackendError] = useState<string | null>(null);
   const [selectedProtocol, setSelectedProtocol] = useState<'http2' | 'http3' | null>(null);
   const [networkCondition, setNetworkCondition] = useState<NetworkCondition>({
     latency: 20,
@@ -14,6 +16,18 @@ function Playground() {
     packetLoss: 0,
     name: '5G',
   });
+
+  useEffect(() => {
+    callHealth()
+      .then((res) => {
+        console.log('backend health from React:', res);
+        setBackendError(null); 
+      })
+      .catch((err) => {
+        console.error('health call failed:', err);
+        setBackendError(err?.message ?? 'Backend unavailable. Please try again.');
+      });
+  }, []);
 
   const handleProtocolSelect = (protocol: 'http2' | 'http3') => {
     setSelectedProtocol(protocol);
@@ -45,6 +59,11 @@ function Playground() {
       </nav>
 
       <main className="container mx-auto px-6 py-20">
+        {backendError && (
+          <div className="mb-4 rounded-md border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm text-red-200">
+            Backend error: {backendError}
+          </div>
+        )}
         <div className="text-center mb-20">
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

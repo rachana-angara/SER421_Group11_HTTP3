@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class ResourceController {
@@ -108,26 +110,66 @@ public class ResourceController {
 
         private static final long FAST_API_DELAY_MS = 30L;   // ~30 ms delay
 
-    /**
-     * 2.4 GET /api/resource/api/fast
-     *
-     * Fast API endpoint used for latency comparison.
-     */
+    /// 2.4 GET /api/resource/api/fast
+    //
+    // Fast API endpoint used for latency comparison.
+    // Now also aware of "protocol" (http2/http3) and "condition" (5g/wifi/slow).
     @GetMapping("/api/resource/api/fast")
     public Map<String, Object> getFastApi(
+            @RequestParam(name = "protocol", required = false, defaultValue = "http2") String protocol,
+            @RequestParam(name = "condition", required = false, defaultValue = "wifi") String condition,
             @RequestParam(name = "id", required = false) Integer id
     ) throws InterruptedException {
 
-        // simulate latency
-        Thread.sleep(FAST_API_DELAY_MS);
+        // normalize
+        String proto = protocol.toLowerCase();
+        String cond  = condition.toLowerCase();
+
+        // base delay by protocol
+        long baseDelayMs;
+        if ("http3".equals(proto)) {
+            baseDelayMs = 25;   // HTTP/3 is "faster"
+        } else {
+            baseDelayMs = 60;   // HTTP/2 default
+        }
+
+        // scale by network condition
+        double scale;
+        switch (cond) {
+            case "5g":
+                scale = 0.7;   // best network
+                break;
+            case "slow3g":
+                scale = 3.0;   // very slow
+                break;
+            case "wifi":
+            default:
+                scale = 1.0;
+                break;
+        }
+
+        long configuredDelayMs = Math.round(baseDelayMs * scale);
+
+        // add small random jitter
+        long jitterMs = ThreadLocalRandom.current().nextLong(0, 20);
+        long simulatedLatencyMs = configuredDelayMs + jitterMs;
+
+        // sleep to simulate latency
+        Thread.sleep(simulatedLatencyMs);
 
         Map<String, Object> body = new HashMap<>();
         body.put("type", "fast");
+        body.put("protocol", proto);
+        body.put("condition", cond);
+        body.put("configuredDelayMs", configuredDelayMs);
+        body.put("measuredLatencyMs", simulatedLatencyMs);
         body.put("id", id);
         body.put("timestamp", Instant.now().toString());
 
         return body;
     }
+
+
 
         private static final long SLOW_API_DELAY_MS = 2000L;   // ~2 seconds
 
