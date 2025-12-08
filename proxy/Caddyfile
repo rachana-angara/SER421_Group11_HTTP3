@@ -1,30 +1,57 @@
 {
-# Do not auto redirect http to https in dev
+# Do not auto redirect HTTP to HTTPS for these local hosts
     auto_https disable_redirects
 }
 
-# 1) HTTP/1.1 only (no TLS)
+# HTTP/1.1 only site (no TLS)
 http://http1.localhost:8081 {
-    root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
-    file_server
+    encode zstd gzip
 
-    reverse_proxy /api/* http://localhost:8080
+# API requests go to Spring Boot backend
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+# Everything else is the React SPA
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+           # SPA fallback: serve index.html for unknown paths so React Router can handle them
+               try_files {path} /index.html
+               file_server
+           }
 }
 
-# 2) HTTPS site where browser will use HTTP/2
+# HTTPS site, typically negotiated as HTTP/2 (h2)
 https://h2.localhost:8443 {
     tls internal
-    root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
-    file_server
+    encode zstd gzip
 
-    reverse_proxy /api/* http://localhost:8080
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               try_files {path} /index.html
+               file_server
+           }
 }
 
-# 3) HTTPS site offering HTTP/2 and HTTP/3 (QUIC)
+# HTTPS site that offers HTTP/2 and HTTP/3 (QUIC)
 https://h3.localhost:9443 {
     tls internal
-    root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
-    file_server
+    encode zstd gzip
 
-    reverse_proxy /api/* http://localhost:8080
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               try_files {path} /index.html
+               file_server
+           }
 }
