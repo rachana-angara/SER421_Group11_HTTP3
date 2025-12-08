@@ -104,21 +104,21 @@ npm run build`}
 }
 
 http://http1.localhost:8081 {
-  root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+  root * "C:/Users/sahil/OneDrive/Desktop/SER 421 Project/SER421_Group11_HTTP3/frontend/dist"
   file_server
   reverse_proxy /api/* http://localhost:8080
 }
 
 https://h2.localhost:8443 {
   tls internal
-  root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+  root * "C:/Users/sahil/OneDrive/Desktop/SER 421 Project/SER421_Group11_HTTP3/frontend/dist"
   file_server
   reverse_proxy /api/* http://localhost:8080
 }
 
 https://h3.localhost:9443 {
   tls internal
-  root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+  root * "C:/Users/sahil/OneDrive/Desktop/SER 421 Project/SER421_Group11_HTTP3/frontend/dist"
   file_server
   reverse_proxy /api/* http://localhost:8080
 }`}
