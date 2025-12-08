@@ -1,0 +1,57 @@
+{
+# Do not auto redirect HTTP to HTTPS for these local hosts
+    auto_https disable_redirects
+}
+
+# HTTP/1.1 only site (no TLS)
+http://http1.localhost:8081 {
+    encode zstd gzip
+
+# API requests go to Spring Boot backend
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+# Everything else is the React SPA
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+           # SPA fallback: serve index.html for unknown paths so React Router can handle them
+               try_files {path} /index.html
+               file_server
+           }
+}
+
+# HTTPS site, typically negotiated as HTTP/2 (h2)
+https://h2.localhost:8443 {
+    tls internal
+    encode zstd gzip
+
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               try_files {path} /index.html
+               file_server
+           }
+}
+
+# HTTPS site that offers HTTP/2 and HTTP/3 (QUIC)
+https://h3.localhost:9443 {
+    tls internal
+    encode zstd gzip
+
+    @api path /api/*
+    handle @api {
+                    reverse_proxy http://localhost:8080
+                }
+
+    handle {
+               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               try_files {path} /index.html
+               file_server
+           }
+}
