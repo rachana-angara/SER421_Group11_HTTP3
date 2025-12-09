@@ -62,22 +62,13 @@ export function VisualizationPage({ protocol, networkCondition, onBack }: Props)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <nav className="container mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Network className="w-8 h-8 text-blue-400" />
-          <span className="text-2xl font-bold text-white">Protocol Racer</span>
-        </div>
-        <button onClick={onBack} className="text-gray-400 hover:text-white transition-colors">
-          <X className="w-6 h-6" />
-        </button>
-      </nav>
-
+      
       <main className="container mx-auto px-6 py-12">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2">
-                {protocol === 'http2' ? 'HTTP/2' : 'HTTP/3'} Performance Visualization
+                {protocol} Performance Visualization
               </h1>
               <p className="text-gray-400">Real-time simulation of protocol performance metrics</p>
             </div>

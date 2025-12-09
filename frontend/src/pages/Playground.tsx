@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { callHealth } from '../utils/apiClient';
 import { NetworkCondition } from '../types';
-import { ProtocolSelectModal } from '../components/ProtocolSelectModal';
-import { NetworkConditionSimulator } from '../components/NetworkConditionSimulator';
+//import { NetworkConditionSimulator } from '../components/NetworkConditionSimulator';
 import { VisualizationPage } from '../components/VisualizationPage';
 
 // Network condition presets used when Labs link into the Playground
@@ -23,15 +22,17 @@ const ORIGIN_MAP: Record<'http1' | 'http2' | 'http3', string> = {
 
 // Full-page reload to a different origin while keeping the current path/query/hash.
 // This is what actually changes the negotiated HTTP protocol (h1 / h2 / h3).
-function switchOrigin(target: keyof typeof ORIGIN_MAP) {
+function switchOrigin(
+  target: keyof typeof ORIGIN_MAP) {
   const { pathname, search, hash } = window.location;
   window.location.href = ORIGIN_MAP[target] + pathname + search + hash;
 }
 
+
 function Playground() {
   const [view, setView] = useState<'home' | 'protocol-select' | 'network-select' | 'visualization'>('home');
   const [backendError, setBackendError] = useState<string | null>(null);
-  const [selectedProtocol, setSelectedProtocol] = useState<'http2' | 'http3' | null>(null);
+  const [selectedProtocol, setSelectedProtocol] = useState<'http1'| 'http2' | 'http3' | null>(null);
   const [networkCondition, setNetworkCondition] = useState<NetworkCondition>({
     latency: 20,
     bandwidth: 10,
@@ -75,15 +76,11 @@ function Playground() {
     }
   }, [location.search]);
 
-  const handleProtocolSelect = (protocol: 'http2' | 'http3') => {
-    setSelectedProtocol(protocol);
-    setView('network-select');
-  };
-
-  const handleNetworkSelect = (condition: NetworkCondition) => {
-    setNetworkCondition(condition);
-    setView('visualization');
-  };
+ 
+  // const handleNetworkSelect = (condition: NetworkCondition) => {
+  //   setNetworkCondition(condition);
+  //   setView('visualization');
+  // };
 
   const handleBackToHome = () => {
     setView('home');
@@ -97,10 +94,10 @@ function Playground() {
   };
 
   // When a protocol is selected and view is visualization, show the full visualization page
-  if (view === 'visualization' && selectedProtocol) {
+  if (view === 'visualization') {
     return (
       <VisualizationPage
-        protocol={selectedProtocol}
+        protocol={'http2'}
         networkCondition={networkCondition}
         onBack={handleBackToHome}
       />
@@ -109,12 +106,7 @@ function Playground() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <nav className="container mx-auto px-6 py-6">
-        <div className="flex items-center space-x-2">
-          <Network className="w-8 h-8 text-blue-400" />
-          <span className="text-2xl font-bold text-white">Protocol Racer</span>
-        </div>
-      </nav>
+      
 
       <main className="container mx-auto px-6 py-20">
         {backendError && (
@@ -133,19 +125,29 @@ function Playground() {
           </span>
           <div className="flex flex-wrap justify-center gap-2">
             <button
-              onClick={() => switchOrigin('http1')}
+              onClick={() => {switchOrigin('http1');
+                  setSelectedProtocol('http1');   // ← your second action
+              }}
               className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-200 border border-slate-600"
             >
               Open HTTP/1.1 origin
             </button>
             <button
-              onClick={() => switchOrigin('http2')}
+              onClick={() => {
+  switchOrigin('http2');
+  setSelectedProtocol('http2');   // ← your second action
+}}
+
               className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-200 border border-slate-600"
             >
               Open HTTP/2 origin
             </button>
             <button
-              onClick={() => switchOrigin('http3')}
+              onClick={() => {
+                 switchOrigin('http3',)
+                 setSelectedProtocol('http3');
+                }
+              }
               className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-gray-200 border border-slate-600"
             >
               Open HTTP/3 origin
@@ -156,27 +158,22 @@ function Playground() {
         <div className="text-center mb-20">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => setView('protocol-select')}
+              onClick={() => setView('visualization')}
               className="px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 flex items-center space-x-2"
             >
               <span>Start Comparison</span>
               <ArrowRight className="w-5 h-5" />
             </button>
           </div>
-
-          {view === 'protocol-select' && (
-            <ProtocolSelectModal onSelect={handleProtocolSelect} onClose={handleBackToHome} />
-          )}
-
-          {view === 'network-select' && selectedProtocol && (
+          {/* {view === 'network-select' && (
             <NetworkConditionSimulator
-              protocol={selectedProtocol}
+              protocol={'http2'}
               onSelect={handleNetworkSelect}
               onBack={() => {
-                setView('protocol-select');
+                setView('network-select');
               }}
             />
-          )}
+          )} */}
         </div>
       </main>
 
