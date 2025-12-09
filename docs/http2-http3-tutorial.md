@@ -101,19 +101,25 @@ From the `backend/` folder:
 ```bash
 mvn clean package
 mvn spring-boot:run
+```
 
 The backend will start on:
 http://localhost:8080
 
 
 Quick health check:
+
+```
 curl http://localhost:8080/api/health
 # {"status":"ok"}
+```
 
-4.3 Start the Frontend
+### 4.3 Start the Frontend
 From the frontend/ folder:
+```
 npm install
 npm run dev
+```
 
 Open the app in the browser:
 
@@ -122,11 +128,11 @@ http://localhost:5173/playground
 
 You should see the Protocol Racer playground with a “Start Simulation” or “Start Comparison” button and network condition cards (5G, WiFi, Slow 3G).
 
-5. Step-by-Step Learning Activities
+## 5. Step-by-Step Learning Activities
 
 This section is the core of the tutorial. Try to actually click through each step while reading.
 
-5.1 Explore the Playground
+### 5.1 Explore the Playground
 
 Open http://localhost:5173/playground.
 
@@ -152,7 +158,7 @@ A Live Chart / Waterfall section below.
 
 We will use these elements in each activity.
 
-5.2 Measure Base Latency
+### 5.2 Measure Base Latency
 
 Goal: get a feel for “normal” latency under a good network.
 
@@ -182,7 +188,7 @@ How far is the measured latency from the “ideal” latency printed in the netw
 
 Does latency fluctuate between runs even when nothing else changes?
 
-5.3 Compare HTTP2 vs HTTP3 Under Different Networks
+### 5.3 Compare HTTP2 vs HTTP3 Under Different Networks
 
 Goal: see how protocol behavior changes when the network gets worse.
 
@@ -220,7 +226,13 @@ On “clean” networks (like good WiFi), TCP’s head-of-line blocking hurts le
 
 On lossy networks (Slow 3G), independent streams in QUIC can help keep other resources moving.
 
-5.4 Inspect Resource Waterfalls
+![Protocol Racer Playground](./images/http1.jpg)
+
+![Protocol Racer Playground](./images/http2.jpg)
+
+![Protocol Racer Playground](./images/http3.jpg)
+
+### 5.4 Inspect Resource Waterfalls
 
 Goal: relate raw numbers to actual resource loading patterns.
 
@@ -250,7 +262,7 @@ How does the total “height” or overall time of the waterfall compare between
 
 You can take screenshots and annotate them for your report or slides.
 
-5.5 Design Your Own Mini Experiment
+### 5.5 Design Your Own Mini Experiment
 
 Goal: practice designing a simple performance experiment, not just clicking buttons.
 
@@ -280,7 +292,7 @@ Write a short paragraph describing what you saw. Did the data support your hypot
 
 This small experiment can be reused directly in your project report and in the analytical section.
 
-6. History and Standards
+## 6. History and Standards
 
 Here is a short history of the protocols we are using:
 
@@ -318,11 +330,11 @@ IETF (Internet Engineering Task Force) – defines the protocol RFCs.
 
 W3C (World Wide Web Consortium) – focuses on browser APIs and the web platform, closely related to HTTP’s evolution.
 
-7. Analysis: Is HTTP/3 Worth It?
+## 7. Analysis: Is HTTP/3 Worth It?
 
 This section is where the team expresses an opinion, not just a summary. Adjust the wording as needed to match your own results.
 
-7.1 Observations from Protocol Racer
+### 7.1 Observations from Protocol Racer
 
 From our experiments in the playground, we saw:
 
@@ -334,7 +346,7 @@ The waterfall for HTTP/3 runs often felt smoother: resources started quickly and
 
 These observations match many production reports: HTTP/3 is not a magic bullet, but it helps most in rough network conditions.
 
-7.2 Pros
+### 7.2 Pros
 
 Better behavior on lossy networks due to QUIC’s stream independence.
 
@@ -342,7 +354,7 @@ Faster connection setup (fewer round trips), which helps first-time visitors.
 
 Encryption built in; there is no unencrypted variant.
 
-7.3 Cons and Challenges
+### 7.3 Cons and Challenges
 
 More complex server implementation and operational tooling.
 
@@ -350,7 +362,7 @@ Some middleboxes and older networks still have issues with UDP traffic.
 
 For many desktop users on good broadband, the performance difference may be small.
 
-7.4 Overall Take
+### 7.4 Overall Take
 
 Our opinion:
 
@@ -362,7 +374,7 @@ However, it does not replace the basics: caching, good API design, bundling, and
 
 You should adapt this section to reflect your own measurements and the articles you read, and cite those sources in the reference list.
 
-8. References
+## 8. References
 
 These are example references you can expand or adjust. Use any reasonable citation style; the key is to link each reference where you use it.
 
@@ -380,7 +392,7 @@ Google Developers, “Introduction to QUIC,” Chromium / web.dev article.
 
 (Replace or extend this list with the actual sources you used.)
 
-9. Extra Learning Resources
+## 9. Extra Learning Resources
 
 These are optional resources for readers who want to go deeper:
 
