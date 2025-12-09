@@ -114,8 +114,6 @@ function Labs() {
     const labId = selectedLab?.id;
     if (!labId) return;
 
-    // For Lab 2, we only navigate to Playground and (optionally) pass the condition.
-    // The user will choose the protocol inside Playground before running visualization.
     if (labId === 'lab2') {
       const params = new URLSearchParams();
       params.set('lab', labId);
@@ -128,7 +126,6 @@ function Labs() {
       return;
     }
 
-    // Default behavior for any future labs that use playgroundPreset:
     if (!step.playgroundPreset) return;
 
     const { protocol, condition } = step.playgroundPreset;
@@ -141,7 +138,6 @@ function Labs() {
 
   return (
     <div className="container mx-auto px-6 py-12 text-gray-200 flex flex-col md:flex-row gap-8">
-      {/* Left column: lab list */}
       <aside className="md:w-1/3 space-y-4">
         <h1 className="text-3xl font-bold text-white mb-2">Labs</h1>
         <p className="text-sm text-gray-300 mb-4">
@@ -166,7 +162,6 @@ function Labs() {
         </div>
       </aside>
 
-      {/* Right column: lab detail */}
       <section className="flex-1 bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-4">
         {selectedLab && (
           <>

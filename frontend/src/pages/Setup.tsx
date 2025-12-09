@@ -15,7 +15,6 @@ export default function Setup() {
         </p>
       </header>
 
-      {/* 1. Prerequisites */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">1. Prerequisites</h2>
         <ul className="list-disc list-inside text-gray-300 space-y-1 text-sm">
@@ -27,7 +26,6 @@ export default function Setup() {
         </ul>
       </section>
 
-      {/* 2. Hosts file */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">2. Hostnames configuration</h2>
         <p className="text-gray-300 text-sm">
@@ -45,7 +43,6 @@ export default function Setup() {
         </p>
       </section>
 
-      {/* 3. Backend */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">3. Start the backend (Spring Boot)</h2>
         <p className="text-gray-300 text-sm">
@@ -69,7 +66,6 @@ curl http://localhost:8080/api/protocol`}
         </p>
       </section>
 
-      {/* 4. Frontend build */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">4. Build the frontend</h2>
         <p className="text-gray-300 text-sm">
@@ -87,7 +83,6 @@ npm run build`}
         </p>
       </section>
 
-      {/* 5. Caddy */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">5. Run Caddy (HTTP/1.1 / HTTP/2 / HTTP/3)</h2>
         <p className="text-gray-300 text-sm">
@@ -135,7 +130,6 @@ caddy run --config Caddyfile --adapter caddyfile`}
         </p>
       </section>
 
-      {/* 6. Verifying protocols */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">6. Verifying protocols (DevTools)</h2>
         <p className="text-gray-300 text-sm">
@@ -154,7 +148,6 @@ caddy run --config Caddyfile --adapter caddyfile`}
         </p>
       </section>
 
-      {/* 7. Next steps */}
       <section className="bg-slate-900/70 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">7. Next steps</h2>
         <ul className="list-disc list-inside text-gray-300 text-sm space-y-1">

@@ -1,7 +1,6 @@
 export default function Learn() {
   return (
     <div className="container mx-auto px-6 py-12 text-gray-200 space-y-10">
-      {/* Header */}
       <header className="space-y-4">
         <h1 className="text-4xl font-bold text-white">
           Learn HTTP/1.1, HTTP/2, and HTTP/3
@@ -13,7 +12,6 @@ export default function Learn() {
         </p>
       </header>
 
-      {/* Learning Outcomes */}
       <section className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 space-y-3">
         <h2 className="text-2xl font-semibold text-white">
           Learning Outcomes
@@ -34,7 +32,6 @@ export default function Learn() {
         </ul>
       </section>
 
-      {/* Table of contents */}
       <section className="bg-slate-900/40 border border-slate-900 rounded-xl p-6">
         <h2 className="text-xl font-semibold text-white mb-3">
           On this page
@@ -78,7 +75,6 @@ export default function Learn() {
         </ul>
       </section>
 
-      {/* 1. History */}
       <section id="history" className="space-y-3">
         <h2 className="text-2xl font-semibold text-white">
           1. A quick history of HTTP
@@ -94,7 +90,6 @@ export default function Learn() {
         </p>
       </section>
 
-      {/* 2. Problems in HTTP/1.1 */}
       <section id="problems" className="space-y-3">
         <h2 className="text-2xl font-semibold text-white">
           2. Performance problems in HTTP/1.1
@@ -121,7 +116,6 @@ export default function Learn() {
         </ul>
       </section>
 
-      {/* 3. HTTP/2 */}
       <section id="http2" className="space-y-3">
         <h2 className="text-2xl font-semibold text-white">
           3. HTTP/2: binary framing and multiplexing

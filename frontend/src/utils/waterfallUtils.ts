@@ -8,7 +8,6 @@ export const generateWaterfallData = (
   const packetLossImpact = 1 + networkCondition.packetLoss / 50;
 
   const typeNames: Array<'html' | 'css' | 'js' | 'image' | 'api'> = ['html', 'css', 'js', 'image', 'api'];
-  const typeIcons = { html: '📄', css: '🎨', js: '⚡', image: '🖼️', api: '🔗' };
   const typeColors = {
     html: '#3b82f6',
     css: '#06b6d4',
@@ -28,7 +27,7 @@ export const generateWaterfallData = (
 
     data.push({
       id: i + 1,
-      name: `${typeIcons[type]} ${type.toUpperCase()} ${i + 1}`,
+      name: `${type.toUpperCase()} ${i + 1}`,
       type,
       dns: Math.round(dnsBase * latencyMultiplier * packetLossImpact),
       tcp: Math.round(tcpBase * latencyMultiplier * packetLossImpact),

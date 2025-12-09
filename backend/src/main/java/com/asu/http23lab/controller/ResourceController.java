@@ -12,10 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 public class ResourceController {
 
-    // --- 1. CSS resource simulation ----------------------------------------
 
-    private static final int DEFAULT_CSS_SIZE_KB = 2;    // ~2 KB by default
-    private static final long CSS_DELAY_MS = 50L;        // ~50 ms artificial delay
+    private static final int DEFAULT_CSS_SIZE_KB = 2;    
+    private static final long CSS_DELAY_MS = 50L;        
 
     /**
      * GET /api/resource/css
@@ -32,7 +31,7 @@ public class ResourceController {
         Thread.sleep(CSS_DELAY_MS);
 
         int kb = (sizeKb == null || sizeKb <= 0) ? DEFAULT_CSS_SIZE_KB : sizeKb;
-        int targetChars = kb * 1024; // chars ≈ bytes
+        int targetChars = kb * 1024; 
 
         String header = "/* fake css file"
                 + (id != null ? " id=" + id : "")
@@ -50,10 +49,8 @@ public class ResourceController {
         return css.toString();
     }
 
-    // --- 2. JS resource simulation -----------------------------------------
-
-    private static final int DEFAULT_JS_SIZE_KB = 4;     // ~4 KB by default
-    private static final long JS_DELAY_MS = 80L;         // ~80 ms artificial delay
+    private static final int DEFAULT_JS_SIZE_KB = 4;     
+    private static final long JS_DELAY_MS = 80L;        
 
     /**
      * GET /api/resource/js
@@ -87,10 +84,9 @@ public class ResourceController {
         return js.toString();
     }
 
-    // --- 3. Image resource simulation --------------------------------------
 
-    private static final int DEFAULT_IMAGE_SIZE_KB = 16; // ~16 KB by default
-    private static final long IMAGE_DELAY_MS = 120L;     // ~120 ms delay
+    private static final int DEFAULT_IMAGE_SIZE_KB = 16; 
+    private static final long IMAGE_DELAY_MS = 120L;    
 
     /**
      * GET /api/resource/image
@@ -117,7 +113,6 @@ public class ResourceController {
         return bytes;
     }
 
-    // --- 4. Fast API simulation --------------------------------------------
 
     /**
      * GET /api/resource/api/fast
@@ -139,15 +134,13 @@ public class ResourceController {
         String proto = protocol.toLowerCase();
         String cond = condition.toLowerCase();
 
-        // Base delay depends on protocol
         long baseDelayMs;
         if ("http3".equals(proto)) {
-            baseDelayMs = 25L;  // HTTP/3 "faster" baseline
+            baseDelayMs = 25L;  
         } else {
-            baseDelayMs = 60L;  // HTTP/2 or default
+            baseDelayMs = 60L; 
         }
 
-        // Network condition scaling
         double scale;
         switch (cond) {
             case "5g":
@@ -164,7 +157,6 @@ public class ResourceController {
 
         long configuredDelayMs = Math.round(baseDelayMs * scale);
 
-        // Add small random jitter
         long jitterMs = ThreadLocalRandom.current().nextLong(0, 20);
         long simulatedLatencyMs = configuredDelayMs + jitterMs;
 
@@ -182,9 +174,8 @@ public class ResourceController {
         return body;
     }
 
-    // --- 5. Slow API simulation --------------------------------------------
 
-    private static final long SLOW_API_DELAY_MS = 2000L;   // ~2 seconds
+    private static final long SLOW_API_DELAY_MS = 2000L;  
 
     /**
      * GET /api/resource/api/slow

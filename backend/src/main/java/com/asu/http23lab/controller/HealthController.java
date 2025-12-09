@@ -17,7 +17,6 @@ public class HealthController {
 
     @GetMapping("/api/protocol")
     public Map<String, String> protocol(HttpServletRequest request) {
-        // Example values: "HTTP/1.1", "HTTP/2.0"
         String protocol = request.getProtocol();
         return Map.of("protocol", protocol);
     }

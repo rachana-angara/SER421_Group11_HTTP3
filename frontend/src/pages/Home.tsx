@@ -17,7 +17,6 @@ export default function Home() {
   return (
     <div className="min-h-[calc(100vh-140px)] bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       <main className="container mx-auto px-6 py-20">
-        {/* Hero */}
         <div className="text-center mb-20">
           <h1 className="text-5xl sm:text-6xl font-bold text-white mb-6 leading-tight">
             Experience the
@@ -44,26 +43,21 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Feature cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
           <FeatureCard
-            icon={<Zap className="w-12 h-12 text-yellow-400" />}
             title="Real-Time Performance"
             description="Watch protocols race side-by-side with live metrics showing speed, latency, and throughput differences."
           />
           <FeatureCard
-            icon={<BarChart3 className="w-12 h-12 text-green-400" />}
             title="Interactive Charts"
             description="Visualize multiplexing streams, header compression ratios, and connection efficiency through dynamic animations."
           />
           <FeatureCard
-            icon={<Wifi className="w-12 h-12 text-blue-400" />}
             title="Network Simulation"
             description="Simulate various network conditions including packet loss, high latency, and bandwidth throttling."
           />
         </div>
 
-        {/* How to use this tutorial */}
         <section className="bg-slate-900/70 border border-slate-800 rounded-2xl p-8 sm:p-10 space-y-4">
           <h2 className="text-3xl font-bold text-white mb-2">
             How to use this tutorial
@@ -97,14 +91,12 @@ export default function Home() {
 }
 
 function FeatureCard(props: {
-  icon: React.ReactNode;
   title: string;
   description: string;
 }) {
-  const { icon, title, description } = props;
+  const { title, description } = props;
   return (
     <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 hover:border-blue-500/50 transition-all duration-300 transform hover:-translate-y-1">
-      <div className="mb-4">{icon}</div>
       <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
       <p className="text-gray-400 leading-relaxed">{description}</p>
     </div>
