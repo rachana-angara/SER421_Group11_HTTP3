@@ -15,7 +15,7 @@ http://http1.localhost:8081 {
 
 # Everything else is the React SPA
     handle {
-               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               root * "../frontend/dist"
            # SPA fallback: serve index.html for unknown paths so React Router can handle them
                try_files {path} /index.html
                file_server
@@ -33,7 +33,7 @@ https://h2.localhost:8443 {
                 }
 
     handle {
-               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               root * "../frontend/dist"
                try_files {path} /index.html
                file_server
            }
@@ -50,7 +50,7 @@ https://h3.localhost:9443 {
                 }
 
     handle {
-               root * "C:/Users/sahil/OneDrive/Desktop/421 progress/SER421_Group11_HTTP3/frontend/dist"
+               root * "../frontend/dist"
                try_files {path} /index.html
                file_server
            }
