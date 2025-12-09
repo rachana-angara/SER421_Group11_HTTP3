@@ -51,7 +51,7 @@ const LABS: Lab[] = [
     steps: [
       {
         id: 'l2-s1',
-        text: 'Open the Playground preconfigured for HTTP/2 with a WiFi-like condition.',
+        text: 'Open the Playground and configure it for HTTP/2 with a WiFi-like condition.',
         playgroundPreset: {
           protocol: 'http2',
           condition: 'wifi'
@@ -59,7 +59,7 @@ const LABS: Lab[] = [
       },
       {
         id: 'l2-s2',
-        text: 'Repeat the experiment using HTTP/3 with the same WiFi-like condition.',
+        text: 'Open the Playground and configure it for HTTP/3 with the same WiFi-like condition.',
         playgroundPreset: {
           protocol: 'http3',
           condition: 'wifi'
@@ -111,13 +111,31 @@ function Labs() {
   const selectedLab = LABS.find(l => l.id === selectedLabId);
 
   const handleOpenInPlayground = (step: LabStep) => {
+    const labId = selectedLab?.id;
+    if (!labId) return;
+
+    // For Lab 2, we only navigate to Playground and (optionally) pass the condition.
+    // The user will choose the protocol inside Playground before running visualization.
+    if (labId === 'lab2') {
+      const params = new URLSearchParams();
+      params.set('lab', labId);
+
+      if (step.playgroundPreset?.condition) {
+        params.set('condition', step.playgroundPreset.condition);
+      }
+
+      navigate(`/playground?${params.toString()}`);
+      return;
+    }
+
+    // Default behavior for any future labs that use playgroundPreset:
     if (!step.playgroundPreset) return;
 
     const { protocol, condition } = step.playgroundPreset;
 
     navigate({
       pathname: '/playground',
-      search: `?lab=${selectedLab?.id}&protocol=${protocol}&condition=${condition}`
+      search: `?lab=${labId}&protocol=${protocol}&condition=${condition}`
     });
   };
 
